@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "axios": "^1.8.3",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vite build",
+    "lint": "vue-cli-service lint",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.5.13"
+  },
+  "main": "src/main.js"
+
+}
