@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       selectedFile: null,
-      apiUrl: "http://127.0.0.1:5000/upload", // Flask API URL
+      apiUrl: "http://localhost:5000/api/files/upload", // Flask API URL
     };
   },
   methods: {
