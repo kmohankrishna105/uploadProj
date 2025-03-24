@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 from models import db
 db.init_app(app)
 
+
 # Import and register Blueprint
 from file_routes import file_bp
 app.register_blueprint(file_bp, url_prefix="/api/files")
