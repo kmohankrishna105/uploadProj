@@ -1,7 +1,10 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import vuetify from './plugins/vuetify'; // Ensure correct path
+import Vue from 'vue'
+import App from './App.vue' // 🔥 Ensure this import exists
+import vuetify from './plugins/vuetify' // Ensure Vuetify is imported
 
-const app = createApp(App);
-app.use(vuetify);
-app.mount('#app');
+Vue.config.productionTip = false;
+
+new Vue({
+  vuetify,
+  render: h => h(App), // Ensure App is used correctly
+}).$mount('#app');

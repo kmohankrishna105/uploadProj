@@ -26,15 +26,13 @@ class BreachDocument(db.Model):
     kpi_relevant = db.Column(db.String(255), nullable=True)
     genuine = db.Column(db.String(255), nullable=True)
     remarks = db.Column(db.Text, nullable=True)
-    sub_date_time = db.Column(db.DateTime, nullable=True, default=None)  # Allow NULL values
-    data = db.Column(db.LargeBinary, nullable=True)  # Store file as binary
-    filename = db.Column(db.String(255), nullable=True)  # New column for storing filenames
-    is_genuine = db.Column(db.Boolean, nullable=True, default=False)  # ✅ Boolean field
+    sub_date_time = db.Column(db.DateTime, nullable=True, default=None)
+    data = db.Column(db.LargeBinary, nullable=True)
+    filename = db.Column(db.String(255), nullable=True)
+    is_genuine = db.Column(db.Boolean, nullable=True, default=False)
 
 
     def to_json(self):
         json_obj = Serializer.serialize(self)
-        json_obj.pop("data", None)  # Remove binary field from JSON output
-        #print("Serilize code work
-        # ing",json_obj)
+        json_obj.pop("data", None)
         return json_obj

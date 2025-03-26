@@ -15,29 +15,24 @@ def get_files():
     if not files:
         return jsonify({"error": "No records found"}), 404  # If empty, return 404
 
-    #print("Fetched files:", [file.to_json() for file in files])  # ✅ Debugging log
-    print("Get dunction ended")
+    print("Get Function ended")
     return jsonify([file.to_json() for file in files])
 
 # Upload File API
-@file_bp.route('/upload', methods=['POST','OPTIONS'])
+@file_bp.route('/upload', methods=['POST', 'OPTIONS'])
 def upload_file():
     print("SUUUUUUUUUUUUUUUUUUUUUUUUUUPER")
-    #print("1234567890",request.json)
-    file_id = request.form.get("id") or (request.json.get("id") if request.is_json else None)
-    #file_id=15
+    file_id = request.form.get("file_id") or (request.json.get("file_id") if request.is_json else None)
+    print("BABUUUUUUU",file_id)
+    print("VARS",vars(request))
     print(file_id)
     print("SUUUUUUUUUUUUUUUUUUUUUUUUUUPER2")
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
     print("Home route was accessed!")
-    #print(request.form)
-    #print("file",file)
     file = request.files['file']
-
     #is_verified = request.form.get("is_verified", "false").lower() == "true"
 
-    #file = request.files["file"]
     file_data = file.read()  # ✅ Read file data once
     existing_file = BreachDocument.query.get(file_id)  # ✅ Fetch the existing file
     print(existing_file.id)
@@ -45,11 +40,11 @@ def upload_file():
     # ✅ Update existing file record
     existing_file.filename = file.filename
     existing_file.data = file_data
-    existing_file.size = len(file_data)
-    existing_file.uploaded_at = datetime.utcnow()
+    #existing_file.size = len(file_data)
+    #existing_file.uploaded_at = datetime.utcnow()
     print("!@#$%^&*()@#$%^&*",type(existing_file))
     print("!@#$%^&*()@#$%^&*",existing_file.filename)
-    print("!@#$%^&*()@#$%^&*",existing_file.uploaded_at)
+    #print("!@#$%^&*()@#$%^&*",existing_file.uploaded_at)
 
     #new_file = breachFile(filename=file.filename, data=file.read(),
     #size = len(file.read()),
@@ -60,32 +55,6 @@ def upload_file():
     db.session.commit()
 
     return jsonify({"message": "File uploaded successfully"})
-
-
-@file_bp.route('/<int:file_id>', methods=['GET'])
-def get_file(file_id):
-    file = BreachDocument.query.get(file_id)
-    if not file:
-        return jsonify({"error": "File not found"}), 404
-    return jsonify(file.to_json())
-
-@file_bp.route('/model', methods=['POST'])
-def update_document():
-    data = request.json
-    file_id = data.get("id")
-
-    if not file_id:
-        return jsonify({"error": "File ID is missing"}), 400
-
-    document = BreachDocument.query.get(file_id)
-
-    if not document:
-        return jsonify({"error": "Record not found"}), 404
-
-    document.is_genuine = bool(data.get("is_genuine", False))  # ✅ Convert to boolean
-    db.session.commit()
-
-    return jsonify({"message": "Record updated successfully"})
 
 # Download File API
 @file_bp.route('/download/<int:file_id>', methods=['GET'])
@@ -111,3 +80,44 @@ def true_records():
     #print("Fetched files:", [file.to_json() for file in files])  # ✅ Debugging log
     print("records function ended")
     return jsonify([file.to_json() for file in files])
+
+
+@file_bp.route('/Update', methods=['PUT'])
+def update_records():
+    print("update_records method")
+    file_id = request.form.get("file_id") or (request.json.get("file_id") if request.is_json else None)
+    print("VAAAAARS",vars(request))
+    print("file_id",file_id)
+    #file = request.files['file']
+    is_genuine = request.form.get("is_genuine") or (request.json.get("is_genuine") if request.is_json else None)
+    print("is_genuinessssssss",is_genuine)
+    remarks = request.form.get("remarks") or (request.json.get("remarks") if request.is_json else None)
+    #is_genuine = request.form.get("is_genuine")
+
+
+
+    #file_data = file.read()  # ✅ Read file data once
+    existing_file = BreachDocument.query.get(file_id)  # ✅ Fetch the existing file
+   # print(existing_file.id)
+   #print(file.filename)
+    # ✅ Update existing file record
+    print(is_genuine)
+    existing_file.is_genuine= is_genuine
+    existing_file.remarks = remarks
+    print(existing_file.is_genuine)
+    #existing_file.data = file_data
+    # existing_file.size = len(file_data)
+    # existing_file.uploaded_at = datetime.utcnow()
+    #print("!@#$%^&*()@#$%^&*", type(existing_file))
+    #print("!@#$%^&*()@#$%^&*", existing_file.filename)
+    # print("!@#$%^&*()@#$%^&*",existing_file.uploaded_at)
+
+    # new_file = breachFile(filename=file.filename, data=file.read(),
+    # size = len(file.read()),
+    # uploaded_at = datetime.utcnow(),
+    # is_verified = is_verified,)
+
+    # db.session.add(new_file)
+    db.session.commit()
+    #return jsonify([file.to_json() for file in files])
+    return jsonify({"message": "Is Genuine value successfully"})

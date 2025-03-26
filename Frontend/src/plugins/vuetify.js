@@ -1,12 +1,21 @@
-// src/plugins/vuetify.js
-import 'vuetify/styles'; // Correct styles import
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib';
+import 'vuetify/dist/vuetify.min.css'; // Correct styles import for Vuetify 2
 
-const vuetify = createVuetify({
-  components,
-  directives,
+Vue.use(Vuetify);
+
+export default new Vuetify({
+  theme: {
+    themes: {
+      light: {
+        primary: '#1976D2',
+        secondary: '#424242',
+        accent: '#82B1FF',
+        error: '#FF5252',
+        info: '#2196F3',
+        success: '#4CAF50',
+        warning: '#FFC107',
+      },
+    },
+  },
 });
-
-export default vuetify;
