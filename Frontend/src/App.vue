@@ -16,8 +16,6 @@
             <v-spacer />
            <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Search"  class="small-search" />
           <v-btn color="primary" @click="fetchGenuineRecords" small density="compact">Show Genuine Records</v-btn>
-
-
           </v-card-title>
            <v-dialog v-model="genuineDialog" max-width="900px">
   <v-card>
@@ -91,7 +89,7 @@
                         <v-btn
                           v-if="editedItem.id && editedItem.filename"
                           color="secondary"
-                          @click="downloadFile(editedItem.id)"
+                          @click="downloadFilenew"
                         >
                           Download File
                         </v-btn>
@@ -196,14 +194,14 @@ export default {
         { text: "GenuineAlert", value: "is_genuine" },
       ],
       items: [],
-      api: "http://localhost:5000/api/files",
+      api: "http://localhost:5000/api/files/",
     };
   },
   computed: {
     processedItems() {
       return this.items.map((item) => ({
         ...item,
-        is_genuine: item.is_genuine ? "Yes" : "No",
+        //is_genuine: item.is_genuine ? "Yes" : "No",
       }));
     },
   },
@@ -239,7 +237,7 @@ export default {
     },
     async saveItem() {
       try {
-        await axios.put(`${this.api}/Update`,{
+        await axios.put(`${this.api}Update`,{
         is_genuine: this.editedItem.is_genuine,
         file_id : this.editedItem.id,
         remarks : this.editedItem.remarks
@@ -266,6 +264,7 @@ export default {
       console.log("File ID response:", this.editedItem.id);
       formData.append("file_id", this.editedItem.id);
 
+
       try {
         const response = await axios.post(`${this.api}/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -286,6 +285,47 @@ export default {
         console.error("Error uploading file:", error);
       }
     },
+
+    async downloadFile() {
+  try {
+    console.log("File downloaded method initiated!");
+    const response = await axios.get(`${this.api}download/${this.editedItem.id}`, {
+     responseType: 'blob', // Ensure we get the file as a Blob
+    });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(response.data);
+    link.download = this.editedItem.filename;
+    link.click();
+
+    console.log("File downloaded successfully!");
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+},
+
+ async downloadFilenew() {
+  try {
+    console.log("File downloaded method initiated!");
+    const response = await axios.get(`${this.api}download`,{
+    params: { file_id: this.editedItem.id },
+     responseType: 'blob',
+    });
+    console.log("File downloaded method almost success!");
+    if (response.data instanceof Blob) {
+      // Create a temporary link to trigger the download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(response.data);  // Create a URL for the Blob
+      link.download = this.editedItem.filename;  // Set the downloaded file's name
+      link.click();  // Trigger the download
+      console.log("File downloaded successfully!");
+    } else {
+      console.error("Response is not a valid Blob:", response.data);
+    }
+    } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+},
     async fetchGenuineRecords() {
     try {
       const response = await axios.get(`${this.api}/records`);

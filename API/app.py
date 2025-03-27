@@ -1,10 +1,11 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:8084"}}, supports_credentials=True) # Enable CORS for Vue.js frontend
+#CORS(app)
+#CORS(app, resources={r"/api/*": {"origins": "http://localhost:8084"}}, supports_credentials=True) # Enable CORS for Vue.js frontend
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # PostgreSQL Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/test'

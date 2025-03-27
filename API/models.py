@@ -14,7 +14,7 @@ class Serializer:
 
 
 class BreachDocument(db.Model):
-    __tablename__ = "breachdocuments"
+    __tablename__ = "breachdocumentsnew"
     #__table_args__={"schema": __SCHEMA__}
     id = db.Column(db.Integer, primary_key=True)
     date_time = db.Column(db.DateTime, nullable=True, default=None)  # Allow NULL values
